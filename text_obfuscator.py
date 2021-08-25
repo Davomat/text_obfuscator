@@ -10,7 +10,7 @@ layout = [[sg.Multiline(size=(100, 20), key='source_text')],  # identify the mul
 
 if __name__ == '__main__':
     # Create the Window
-    window = sg.Window('Test', layout).Finalize()
+    window = sg.Window('Text Obfuscator', layout).Finalize()
 
     # Init the Obfuscator
     obf = Obfuscator()
