@@ -1,4 +1,4 @@
-from obfuscator import Obfuscator
+from src.obfuscator import Obfuscator
 import PySimpleGUI as sg
 
 layout = [[sg.Multiline(size=(100, 20), key='source_text')],  # identify the multiline via key option
