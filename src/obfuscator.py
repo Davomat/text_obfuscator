@@ -9,10 +9,8 @@ class Obfuscator:
         self._translator = Translator()
 
     def obfuscate(self, text: str, iterations: int):
-        print(f"{iterations} iterations remaining.")
-
         # switch to inner recursive function
-        translation = self._inner_obfuscate(text, iterations - 1)
+        translation = self._inner_obfuscate(text, iterations)
 
         # back to first source language only in the outer function
         src_lang = self._translator.detect(text).lang
@@ -21,13 +19,17 @@ class Obfuscator:
         return translation
 
     def _inner_obfuscate(self, text: str, iterations: int):
-        print(f"{iterations} iterations remaining.")
+        # stop criteria
+        if iterations <= 0:
+            return text
 
-        translation = self._translator.translate(text, dest=random.choice(list(LANGUAGES.keys()))).text
+        language = random.choice(list(LANGUAGES.keys()))
 
-        # recursive call with stop criteria
-        if iterations > 0:
-            translation = self._inner_obfuscate(translation, iterations-1)
+        print(f"{iterations} iterations remaining. Current language {LANGUAGES[language]}")
+        translation = self._translator.translate(text, dest=language).text
+
+        # recursive call
+        translation = self._inner_obfuscate(translation, iterations-1)
 
         return translation
 
