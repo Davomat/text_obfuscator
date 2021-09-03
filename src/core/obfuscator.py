@@ -8,12 +8,15 @@ class Obfuscator:
     def __init__(self):
         self._translator = Translator()
 
-    def obfuscate(self, text: str, iterations: int, progbar):
+    def obfuscate(self, text: str, iterations: int, progbar, languages):
         # init progress value
         progress_var = [0]
 
+        # select languages
+        lang_list = languages if len(languages) > 0 else list(LANGUAGES.values())
+
         # switch to inner recursive function
-        translation = self._inner_obfuscate(text, iterations, progress_var, progbar)
+        translation = self._inner_obfuscate(text, iterations, progress_var, progbar, lang_list)
 
         # back to first source language only in the outer function
         src_lang = self._translator.detect(text).lang
@@ -21,21 +24,21 @@ class Obfuscator:
 
         return translation
 
-    def _inner_obfuscate(self, text: str, iterations: int, progress: [int], progbar):
+    def _inner_obfuscate(self, text: str, iterations: int, progress: [int], progbar, languages):
         # stop criteria
         if iterations <= 0:
             return text
 
-        language = random.choice(list(LANGUAGES.keys()))
+        language = random.choice(languages)
         translation = self._translator.translate(text, dest=language).text
 
         # update progress
         progress[0] += (100 - progress[0])/iterations
-        print(f"{iterations} iterations remaining. Current language {LANGUAGES[language]}. Progress: {progress[0]} %")
+        print(f"{iterations} iterations remaining. Current language {language}. Progress: {progress[0]} %")
         progbar.update_bar(progress[0])
 
         # recursive call
-        translation = self._inner_obfuscate(translation, iterations-1, progress, progbar)
+        translation = self._inner_obfuscate(translation, iterations-1, progress, progbar, languages)
 
         return translation
 
