@@ -8,7 +8,11 @@ class Obfuscator:
     def __init__(self):
         self._translator = Translator()
 
-    def obfuscate(self, text: str, iterations: int, progbar, languages):
+    def obfuscate(self, text: str, iterations: int, progbar, languages) -> str:
+        # catch zero length error
+        if len(text) <= 1:
+            return 'Please fill in some text in any language.'
+
         # init progress value
         progress_var = [0]
 
@@ -24,7 +28,7 @@ class Obfuscator:
 
         return translation
 
-    def _inner_obfuscate(self, text: str, iterations: int, progress: [int], progbar, languages):
+    def _inner_obfuscate(self, text: str, iterations: int, progress: [int], progbar, languages) -> str:
         # stop criteria
         if iterations <= 0:
             return text
@@ -41,5 +45,3 @@ class Obfuscator:
         translation = self._inner_obfuscate(translation, iterations-1, progress, progbar, languages)
 
         return translation
-
-
